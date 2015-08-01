@@ -1,5 +1,19 @@
 var models= require('../models/models.js');
 
+exports.create= function(req, res) {
+	var quiz= models.Quiz.build(req.body.quiz);
+	quiz.save({ fields: ["pregunta", "respuesta"]}).then(function(){
+		res.redirect('/quizzes');
+	}); // Si veo que me da error de sintaxis, elimino este punto y coma
+};
+
+exports.new= function(req, res) {
+	var quiz= models.Quiz.build(
+		{ pregunta: 'Pregunta', respuesta: 'Respuesta'}
+	);
+	res.render('quizzes/new', { quiz: quiz });
+};
+
 // Autoload - Factoriza el código si ruta incluye :quizId
 exports.load= function(req, res, next, quizId) {
 	models.Quiz.findById(quizId).then(
