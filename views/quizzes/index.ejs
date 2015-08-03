@@ -1,6 +1,7 @@
 <table>
 <% var i; for(i= 0; i < quizzes.length; i++) { %>
 	<tr>
+		<td><%= quizzes[i].tema %></td>
 		<td><a href="quizzes/<%= quizzes[i].id %>"><%= quizzes[i].pregunta %></a></td>
 		<td><a href="quizzes/<%= quizzes[i].id %>/edit"><button>Editar</button></a></td>
 		<td>

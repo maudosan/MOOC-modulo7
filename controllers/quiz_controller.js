@@ -12,7 +12,7 @@ exports.create= function(req, res) {
 				res.render('quizzes/new', {quiz: quiz, errors: err.errors});
 			} else {
 				quiz.
-				save({ fields: ["pregunta", "respuesta"]})
+				save({ fields: ["tema", "pregunta", "respuesta"]})
 				.then(function(){ res.redirect('/quizzes')})
 			}
 		}
@@ -22,7 +22,7 @@ exports.create= function(req, res) {
 // GET /quizzes/new
 exports.new= function(req, res) {
 	var quiz= models.Quiz.build(
-		{ pregunta: 'Pregunta', respuesta: 'Respuesta'}
+		{ tema: 'tema', pregunta: 'Pregunta', respuesta: 'Respuesta'}	
 	);
 	res.render('quizzes/new', { quiz: quiz, errors: [] });
 };
@@ -82,7 +82,7 @@ exports.update = function(req, res) {
         res.render('quizzes/edit', {quiz: req.quiz, errors: err.errors});
       } else {
         req.quiz     // save: guarda campos pregunta y respuesta en DB
-        .save( {fields: ["pregunta", "respuesta"]})
+        .save( {fields: ["tema", "pregunta", "respuesta"]})
         .then( function(){ res.redirect('/quizzes');});
       }     // Redirección HTTP a lista de preguntas (URL relativo)
     }
