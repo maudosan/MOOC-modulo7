@@ -40,13 +40,23 @@ exports.load= function(req, res, next, quizId) {
 	}).catch(function(error) { next(error); });
 };
 
-// GET /quizzes
+// GET /quizzes  Añadimos tratamiento de busqueda opcional.
 exports.index= function(req, res) {
-	models.Quiz.findAll().then(
-		function(quizzes){
-			res.render('quizzes/index', { quizzes: quizzes, errors: [] });
-		}
-	).catch(function(error) { next(error); });
+	if (req.query.search) {
+		// Una vez que sabemos que se va a buscar algo, guardamos lo que se va a buscar formateado para la función de busqueda.
+		var busqueda= '%' + (req.query.search || '').replace(/ /g,'%') + '%';	
+		models.Quiz.findAll({where: [ "pregunta like ?", busqueda ]}).then(
+			function(quizzes){
+				res.render('quizzes/index', { quizzes: quizzes, errors: [] });
+			}).catch(function(error){next(error)});
+	} else {
+		// Procedimiento habitual
+		models.Quiz.findAll().then(
+			function(quizzes){
+				res.render('quizzes/index', { quizzes: quizzes, errors: [] });
+			}
+		).catch(function(error) { next(error); });
+	}
 };
 
 // GET /quizzes/:Id
