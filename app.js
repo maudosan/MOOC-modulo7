@@ -32,7 +32,7 @@ app.use(partials());
 app.use(favicon(__dirname + "/public/favicon.ico"));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser('Quiz 2015'));
 app.use(session());
 app.use(methodOverride('_method'));
@@ -50,6 +50,18 @@ app.use(function(req, res, next) {
   res.locals.session = req.session;
   next();
 });
+
+// Auto-logout de sesión
+app.use(function(req, res, next) {
+    if (req.session.user) {
+      if (Date.now() - req.session.user.lastRequestTime > 2*60*1000) {
+        delete req.session.user;
+      } else {
+        req.session.user.lastRequestTime = Date.now();
+      }
+    }
+    next();
+  });
 
 // Instalar los enrutadores importados
 app.use('/', routes);
